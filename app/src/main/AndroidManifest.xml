@@ -43,7 +43,7 @@
         </activity> <!-- Branch init -->
 
         <activity android:name=".HomeActivity"
-                  android:launchMode="singleInstance">
+                  android:launchMode="standard">
         </activity>
         <meta-data
                 android:name="io.branch.sdk.BranchKey"

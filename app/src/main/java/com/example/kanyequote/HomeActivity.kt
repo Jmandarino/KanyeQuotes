@@ -33,11 +33,13 @@ class HomeActivity : Activity() {
 
 
 
-
+        Log.e("homeactivity", intent.toString())
+        Log.e("homeactivity", intent.extras?.toString())
         if (intent.hasExtra("quote")) {
             val bd = intent.extras
 
             val quote = bd?.getString("quote")?.toString()
+            Log.e("homeactivity", quote)
             if (quote.isNullOrBlank()){
                 doAsync {
                     val test = get("https://api.kanye.rest/").jsonObject.get("quote")

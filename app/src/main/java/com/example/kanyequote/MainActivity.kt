@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                     // Check '+clicked_branch_link' before deciding whether to use your Branch routing logic
                     if (referringParams.has("quote")){
                         quote = referringParams.get("quote").toString()
+                        Log.e("quote", quote)
                     } else{
 
                     }
@@ -46,6 +47,7 @@ class MainActivity : AppCompatActivity() {
                 Handler().postDelayed({
                     val intent = Intent(this@MainActivity, HomeActivity::class.java)
                     intent.putExtra("quote", quote)
+                    Log.e("extras", intent.extras.toString())
                     startActivity(intent)
                     overridePendingTransition(R.anim.fade_in,R.anim.fade_in)
                     finish()
