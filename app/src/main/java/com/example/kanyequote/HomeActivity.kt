@@ -13,13 +13,12 @@ import io.branch.referral.util.ShareSheetStyle
 import khttp.get
 import kotlinx.android.synthetic.main.activity_home.*
 import org.jetbrains.anko.doAsync
-import io.branch.referral.util.ContentMetadata
 import io.branch.indexing.BranchUniversalObject
 
 
 
 
-class home : Activity() {
+class HomeActivity : Activity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,14 +30,12 @@ class home : Activity() {
         val shareButton = findViewById<Button>(R.id.shareButton)
 
 
-        val extras = intent
 
 
         if (intent.hasExtra("quote")) {
             val bd = intent.extras
 
             val quote = bd?.getString("quote")?.toString()
-
             if (quote.isNullOrBlank()){
                 doAsync {
                     val test = get("https://api.kanye.rest/").jsonObject.get("quote")
@@ -85,10 +82,10 @@ class home : Activity() {
             .setChannel("facebook")
             .setFeature("sharing")
             .setCampaign("Get Kanye West Famous")
-            .addControlParameter("\$desktop_url", "http://www.kanyewest.com/")
+            .addControlParameter("desktop_url", "http://www.kanyewest.com/")
             .addControlParameter("quote", kanyeQuoteTextView.text.toString())
 
-        val ss = ShareSheetStyle(this@home, "[URGENT] Action Needed", "Peep this crazy thing kanye said")
+        val ss = ShareSheetStyle(this@HomeActivity, "[URGENT] Action Needed", "Peep this crazy thing kanye said")
             .setCopyUrlStyle(resources.getDrawable(android.R.drawable.ic_menu_send), "Copy", "Added to clipboard")
             .setMoreOptionStyle(resources.getDrawable(android.R.drawable.ic_menu_search), "Show more")
             .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
@@ -101,7 +98,7 @@ class home : Activity() {
         buo.showShareSheet(this, lp, ss, object : Branch.BranchLinkShareListener {
             override fun onShareLinkDialogLaunched() {}
             override fun onShareLinkDialogDismissed() {}
-            override fun onLinkShareResponse(sharedLink: String, sharedChannel: String, error: BranchError) {}
+            override fun onLinkShareResponse(sharedLink: String?, sharedChannel: String?, error: BranchError?) {}
             override fun onChannelSelected(channelName: String) {}
         })
     }

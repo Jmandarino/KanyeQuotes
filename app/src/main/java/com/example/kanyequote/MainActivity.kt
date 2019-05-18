@@ -1,25 +1,17 @@
 package com.example.kanyequote
 
-import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
 import org.json.JSONObject
 
-import io.branch.indexing.BranchUniversalObject
 import io.branch.referral.Branch
 import io.branch.referral.BranchError
-import io.branch.referral.util.LinkProperties
 import android.util.Log
 import android.content.Intent
 import android.os.Handler
-import kotlinx.android.synthetic.main.activity_main.*
 
-import khttp.get
-import org.jetbrains.anko.doAsync
-import android.widget.Button
-
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
 
     var quote = ""
     // https://medium.com/@pererikbergman/android-splash-screens-a1f44acb4fce
@@ -33,7 +25,7 @@ class MainActivity : Activity() {
     override fun onStart() {
         super.onStart()
 
-        Branch.getInstance(applicationContext).initSession(object : Branch.BranchReferralInitListener {
+        Branch.getInstance().initSession(object : Branch.BranchReferralInitListener {
             override fun onInitFinished(referringParams: JSONObject, error: BranchError?) {
                 //If not Launched by clicking Branch link
                 if (error == null) {
@@ -52,7 +44,7 @@ class MainActivity : Activity() {
                 // splash is up for 1 second at least
 
                 Handler().postDelayed({
-                    val intent = Intent(this@MainActivity, home::class.java)
+                    val intent = Intent(this@MainActivity, HomeActivity::class.java)
                     intent.putExtra("quote", quote)
                     startActivity(intent)
                     overridePendingTransition(R.anim.fade_in,R.anim.fade_in)
