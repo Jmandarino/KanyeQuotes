@@ -1,7 +1,9 @@
 package com.example.kanyequote
 
 import android.app.Activity
+import android.app.PendingIntent.getActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
@@ -86,8 +88,8 @@ class HomeActivity : Activity() {
             .addControlParameter("quote", kanyeQuoteTextView.text.toString())
 
         val ss = ShareSheetStyle(this@HomeActivity, "[URGENT] Action Needed", "Peep this crazy thing kanye said")
-            .setCopyUrlStyle(resources.getDrawable(android.R.drawable.ic_menu_send), "Copy", "Added to clipboard")
-            .setMoreOptionStyle(resources.getDrawable(android.R.drawable.ic_menu_search), "Show more")
+            .setCopyUrlStyle(ContextCompat.getDrawable(this@HomeActivity ,android.R.drawable.ic_menu_send), "Copy", "Added to clipboard")
+            .setMoreOptionStyle(ContextCompat.getDrawable(this@HomeActivity ,android.R.drawable.ic_menu_search), "Show more")
             .addPreferredSharingOption(SharingHelper.SHARE_WITH.FACEBOOK)
             .addPreferredSharingOption(SharingHelper.SHARE_WITH.EMAIL)
             .addPreferredSharingOption(SharingHelper.SHARE_WITH.MESSAGE)
