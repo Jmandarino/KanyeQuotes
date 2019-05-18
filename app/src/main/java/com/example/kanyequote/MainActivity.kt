@@ -12,6 +12,7 @@ import io.branch.referral.BranchError
 import io.branch.referral.util.LinkProperties
 import android.util.Log
 import android.content.Intent
+import android.os.Handler
 import kotlinx.android.synthetic.main.activity_main.*
 
 import khttp.get
@@ -21,53 +22,52 @@ import android.widget.Button
 class MainActivity : Activity() {
 
     var quote = ""
+    // https://medium.com/@pererikbergman/android-splash-screens-a1f44acb4fce
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val button = findViewById<Button>(R.id.refreshButton)
-        button.setOnClickListener {
-            refreshOnclick()
-        }
     }
 
 
     override fun onStart() {
         super.onStart()
 
-        doAsync{
-            val test = get("https://api.kanye.rest/").jsonObject.get("quote")
-            Log.e("error------", test.toString())
-            quote = test.toString() // this works
-        }
-        //Branch.getInstance(getApplicationContext()).initSession{
-        Branch.getInstance(getApplicationContext()).initSession(object : Branch.BranchReferralInitListener {
+        Branch.getInstance(applicationContext).initSession(object : Branch.BranchReferralInitListener {
             override fun onInitFinished(referringParams: JSONObject, error: BranchError?) {
                 //If not Launched by clicking Branch link
                 if (error == null) {
                     Log.e("BRANCH SDK", referringParams.toString())
                     // Retrieve deeplink keys from 'referringParams' and evaluate the values to determine where to route the user
                     // Check '+clicked_branch_link' before deciding whether to use your Branch routing logic
-                    kanyeQuoteText.text = quote
+                    if (referringParams.has("quote")){
+                        quote = referringParams.get("quote").toString()
+                    } else{
 
+                    }
                 } else {
                     Log.e("BRANCH SDK", "error")
                 }
+
+                // splash is up for 1 second at least
+
+                Handler().postDelayed({
+                    val intent = Intent(this@MainActivity, home::class.java)
+                    intent.putExtra("quote", quote)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.fade_in,R.anim.fade_in)
+                    finish()
+
+                }, 500)
+
+
             }
+
+
         }, this.intent.data, this)
     }
 
     public override fun onNewIntent(intent: Intent) {
         this.intent = intent
-    }
-
-    public fun refreshOnclick(){
-        doAsync{
-            val test = get("https://api.kanye.rest/").jsonObject.get("quote")
-            Log.e("error------", test.toString())
-            quote = test.toString() // this works
-            kanyeQuoteText.text = quote
-        }
-
     }
 }
